@@ -2,7 +2,7 @@ const schema = require('./schema');
 const bcrypt = require('bcrypt');
 module.exports = function(app){
     // registrace
-    app.post('/api/vytvoritUzivatele',async(req,res)=>{
+    app.post('/api/user/vytvoritUzivatele',async(req,res)=>{
         try{
             const vytvareni = await schema.create(req.body);
             return res.status(200).json({"name":vytvareni.name,"id":vytvareni._id});
@@ -11,7 +11,7 @@ module.exports = function(app){
         }
     })
     // přihlášení
-    app.post('/api/prihlasitUzivatele',async(req,res)=>{
+    app.post('/api/user/prihlasitUzivatele',async(req,res)=>{
         const user = req.body;
         try{
             if(typeof user.email === 'undefined') throw {message:"Email není zadán"};

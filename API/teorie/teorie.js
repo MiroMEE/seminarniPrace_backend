@@ -1,6 +1,6 @@
 const schema = require('./scheme');
 module.exports = function(app){
-    app.post("/api/vytvoritTeorii", async(req,res)=>{
+    app.post("/api/teorie/vytvoritTeorii", async(req,res)=>{
         try {
             const vytvoritTeorii = await schema.create(req.body);
             return res.status(200).json(vytvoritTeorii);
@@ -8,9 +8,10 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     });
-    app.get("/api/teorie",async(req,res)=>{
+    app.get("/api/teorie/teorie/:id",async(req,res)=>{
+        const {id} = req.params;
         try {
-            const teorie = await schema.findOne({'_id':req.body.id});
+            const teorie = await schema.findOne({'_id':id});
             return res.status(200).json(teorie);
         } catch (error) {
             return res.status(500).json({message:error.message});
@@ -25,7 +26,7 @@ module.exports = function(app){
             return res.status(500).json({message:error.message})
         }
     })
-    app.get('/api/vsechnyTeorie',async(req,res)=>{
+    app.get('/api/teorie/vsechnyTeorie',async(req,res)=>{
         try {
             const vsechnyTeorie = await schema.find({});
             return res.status(200).json(vsechnyTeorie);        
@@ -33,7 +34,7 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     })
-    app.delete("/api/teorii",async(req,res)=>{
+    app.post("/api/teorie",async(req,res)=>{
         try {
             await schema.deleteOne({_id:req.body.id});
             return res.status(200).json("Smazána teorie.");

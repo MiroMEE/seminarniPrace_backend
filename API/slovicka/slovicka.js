@@ -1,6 +1,6 @@
 const schema = require('./scheme');
 module.exports = function(app){
-    app.post("/api/vytvoritSlovicka", async(req,res)=>{
+    app.post("/api/slovicka/vytvoritSlovicka", async(req,res)=>{
         try {
             const vytvoreneSlovicko = await schema.create(req.body);
             return res.status(200).json(vytvoreneSlovicko);
@@ -8,9 +8,10 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     });
-    app.get("/api/slovicko",async(req,res)=>{
+    app.get("/api/slovicka/slovicko/:id",async(req,res)=>{
+        const {id} = req.params;
         try {
-            const slovicko = await schema.findOne({'_id':req.body.id});
+            const slovicko = await schema.findOne({'_id':id});
             return res.status(200).json(slovicko);
         } catch (error) {
             return res.status(500).json({message:error.message});
@@ -20,7 +21,7 @@ module.exports = function(app){
         const slovicko = req.body;
         try{
             await schema.findOneAndUpdate({_id:slovicko.id},slovicko);
-            return res.status(200).json("Aktualizováno slovíčko: ",slovicko._id);
+            return res.status(200).json("Aktualizováno slovíčko");
         } catch(error){
             return res.status(500).json({message:error.message});
         }
@@ -33,7 +34,7 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     })
-    app.delete("/api/slovicko",async(req,res)=>{
+    app.delete("/api/slovicka/slovicko",async(req,res)=>{
         try {
             await schema.deleteOne({_id:req.body.id});
             return res.status(200).json("Smazáná slovíčka",);
