@@ -6,9 +6,9 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-//require('./API/slovicka/slovicka')(app);
+require('./API/slovicka/slovicka')(app);
 require('./API/users/users')(app);
-//require('./API/teorie/teorie')(app);
+require('./API/teorie/teorie')(app);
 
 mongoose
     .connect('mongodb://localhost/rj_database',{
