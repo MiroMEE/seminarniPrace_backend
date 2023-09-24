@@ -34,7 +34,7 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     })
-    app.delete("/api/slovicka/slovicko",async(req,res)=>{
+    app.post("/api/slovicka/smazat",async(req,res)=>{
         try {
             await schema.deleteOne({_id:req.body.id});
             return res.status(200).json("Smazáná slovíčka",);
