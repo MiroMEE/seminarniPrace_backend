@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema(
     {
+        slovicka:Array,
         name:String,
-        teorie_json:String
+        gameMode:String
     }
 );
 
-const Model = mongoose.model("Teorie",schema);
+const Model = mongoose.model("datas",schema);
 module.exports = Model;

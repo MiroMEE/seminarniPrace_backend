@@ -8,8 +8,7 @@ app.use(cors());
 
 require('./API/slovicka/slovicka')(app);
 require('./API/users/users')(app);
-require('./API/teorie/teorie')(app);
-
+require('./API/datas/datas')(app);
 mongoose
     .connect('mongodb://localhost/rj_database',{
         useNewUrlParser:true,

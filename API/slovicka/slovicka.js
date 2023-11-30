@@ -42,4 +42,18 @@ module.exports = function(app){
             return res.status(500).json({message:error.message});
         }
     })
+
+    app.post("/api/slovicka/getSlovicek",async(req,res)=>{
+        try {
+            const slovicka = req.body.slovicka;
+            const slovickaFull = [];
+            for (const id of slovicka) {
+                const sl = await schema.findOne({'_id':id})
+                slovickaFull.push(sl);
+            }
+            return res.status(200).json(slovickaFull);
+        } catch (error) {
+            return res.status(500).json({message:error.message});
+        }
+    });
 }
