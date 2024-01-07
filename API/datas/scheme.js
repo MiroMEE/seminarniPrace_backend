@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema(
     {
-        slovicka:Array,
         name:String,
-        gameMode:String
+        slovicka:Array,
+        gameMode:String,
+        hosted:String,
+        players:Array
     }
 );
 

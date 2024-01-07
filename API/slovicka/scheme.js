@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema(
     {
         name:String,
-        slovicka_json:String
+        slovicka_json:String,
+        jazyk:String
     }
 );
 

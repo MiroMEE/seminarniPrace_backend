@@ -21,7 +21,18 @@ module.exports = function(app){
             if(typeof userFromScheme === 'undefined') throw {message:"Chyba při zadávání údajů."};
             if(typeof user.password === 'undefined') throw {message:"Heslo není zadáno"};
             if(!await bcrypt.compare(user.password, userFromScheme.password)) throw {message:"Heslo se neschoduje"};
-            return res.status(200).json({message:"Schváleno!"});
+            return res.status(200).json({message:"Schváleno!",id:userFromScheme._id});
+        } catch(error){
+            return res.status(500).json({message:error.message});
+        }
+    })
+    app.post('/api/user/ziskatUzivatele',async(req,res)=>{
+        const user = req.body;
+        try{
+            const userFromScheme = await schema.findOne({
+                _id: user.id
+            })
+            return res.status(200).json(userFromScheme.name);
         } catch(error){
             return res.status(500).json({message:error.message});
         }
