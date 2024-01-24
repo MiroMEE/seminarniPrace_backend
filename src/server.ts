@@ -14,6 +14,7 @@ const uri:string = process.env.uri || '';
 
 app.use(cors({
     credentials:true,
+    origin: ["http://localhost:3000", "https://procvicslovicka.netlify.app" ],
     optionsSuccessStatus:200,
 }));
 app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
