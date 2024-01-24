@@ -14,8 +14,8 @@ const uri:string = process.env.uri || '';
 
 app.use(cors({
     credentials:true,
-    origin: ["http://localhost:3000", "https://procvicslovicka.netlify.app" ],
-    optionsSuccessStatus:200,
+    origin: process.env.origin,
+    optionsSuccessStatus:200
 }));
 // app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
