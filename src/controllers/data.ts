@@ -21,7 +21,7 @@ export const vytvorHru = async (req:express.Request,res:express.Response)=>{
 export const ziskatHru = async (req:express.Request,res:express.Response)=>{
     try{
         const {id} = req.params;
-        const data = getDataById(id);
+        const data = await getDataById(id);
         return res.json(data).end();
     } catch(error){
         console.log(error);

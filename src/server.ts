@@ -13,8 +13,14 @@ const port = process.env.PORT || 3000;
 const uri:string = process.env.uri || '';
 
 app.use(cors({
-    credentials:true
+    origin:'http://localhost:4200', 
+    credentials:true,
+    optionsSuccessStatus:200,
 }));
+app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -28,6 +34,3 @@ mongoose.connect(uri);
 mongoose.connection.on('error',(error:Error) => console.log(error));
 
 app.use("/",router());
-
-
-// bcrypt, .env heslo, JWT

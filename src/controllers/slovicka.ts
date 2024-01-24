@@ -1,11 +1,10 @@
 import express from "express";
 
-import {getSlovickaByName,createSlovicko,getSlovickoById,getAllSlovicka, deleteSlovickoById} from '../db/SlovickaScheme';
-import { tryGetName } from "../helpers/helper";
+import {getSlovickaByName,createSlovicko,getSlovickoById,getAllSlovicka, deleteSlovickoById, yourSlovicka} from '../db/SlovickaScheme';
 
 export const vytvorSlovicko = async(req:express.Request,res:express.Response) => {
     try {
-        const {name,slovicka_json,jazyk} = req.body;
+        const {name,slovicka_json,jazyk,username} = req.body;
         if(!name||!slovicka_json||!jazyk){
             return res.sendStatus(400);
         }
@@ -13,8 +12,7 @@ export const vytvorSlovicko = async(req:express.Request,res:express.Response) =>
         if(existName){
             return res.sendStatus(403)
         }
-        const token = req.cookies['token']
-        const username:string = tryGetName(token);
+        console.log(username);
         const slovicko = await createSlovicko({
             name:name,
             username:username,
@@ -43,7 +41,7 @@ export const getSlovicko =  async(req:express.Request,res:express.Response) => {
 export const getAllSlovicek = async(req:express.Request,res:express.Response) => {
     try {
         const allSlovicka = await getAllSlovicka();
-        return res.json(allSlovicka)
+        return res.json(allSlovicka);
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -70,6 +68,34 @@ export const smazatSlovicko = async(req:express.Request,res:express.Response) =>
         const {id} = req.params;
         const znicit = await deleteSlovickoById(id);
         return res.json(znicit);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+
+export const getSlovickaA = async(req:express.Request, res:express.Response) => {
+    const {slovicka} = req.body;
+    const slovickaBalicek = [];
+    try {
+        for (const id of slovicka){
+            const getSlovicko = await getSlovickoById(id);
+            slovickaBalicek.push(getSlovicko);
+        }
+        return res.json(slovickaBalicek);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+}
+export const getOwnSlovicka = async(req:express.Request, res:express.Response) => {
+    try {
+        const {username} = req.body;
+        if(!username){
+            return res.sendStatus(400);
+        }
+        const slovicka = await yourSlovicka(username);    
+        return res.json(slovicka);
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);

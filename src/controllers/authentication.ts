@@ -6,7 +6,6 @@ import { authentication, comparePassword, setToken } from '../helpers/helper';
 export const login = async (req:express.Request,res: express.Response) => {
     try {
         const { email, password } = req.body;
-
         if (!email || !password) {
         return res.sendStatus(400);
         }
@@ -19,9 +18,8 @@ export const login = async (req:express.Request,res: express.Response) => {
             return res.sendStatus(403);
         }
         const token = setToken(user.username,user._id);
-        res.cookie('token',token,{httpOnly:true});
-
-        return res.status(200).json(user).end();
+        //res.cookie('token',token,{httpOnly:true, secure:true});
+        return res.status(200).json({token:token}).end();
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);
@@ -38,7 +36,6 @@ export const register = async (req:express.Request, res: express.Response) => {
 
         const existingUserByEmail = await getUserByEmail(email);
         const existingUserByName = await getUserByName(username);
-        console.log(existingUserByEmail,existingUserByName)
         if(existingUserByEmail || existingUserByName){
             return res.sendStatus(403);
         }
