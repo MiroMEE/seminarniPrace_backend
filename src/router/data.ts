@@ -4,6 +4,6 @@ import { ziskatHru, vytvorHru } from '../controllers/data';
 
 // metody
 export default (router: express.Router) => {
-    router.post('/data/',vytvorHru);
-    router.get('/data/:id',ziskatHru)
+    router.post('/api/data/',vytvorHru);
+    router.get('/api/data/:id',ziskatHru)
 }
