@@ -17,10 +17,10 @@ app.use(cors({
     origin: process.env.origin,
     optionsSuccessStatus:200
 }));
-// app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//    next();
-// });
+app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
 app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
