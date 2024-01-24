@@ -13,7 +13,6 @@ const port = process.env.PORT || 3000;
 const uri:string = process.env.uri || '';
 
 app.use(cors({
-    origin:process.env.origin, 
     credentials:true,
     optionsSuccessStatus:200,
 }));
