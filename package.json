@@ -1,7 +1,7 @@
 {
-  "name": "slovicka_database",
+  "name": "seminarniprace_backend",
   "version": "0.0.1",
-  "description": "Databáze pro stránku s procvičováním slovíček.",
+  "description": "Databáze a socket.io pro stránku s procvičováním slovíček.",
   "main": "./src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,6 +15,7 @@
     "@types/cookie-parser": "^1.4.6",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
+    "@types/socket.io": "^3.0.2",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
@@ -27,6 +28,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^7.5.2",
     "nodemon": "^3.0.2",
+    "socket.io": "^4.7.4",
     "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {

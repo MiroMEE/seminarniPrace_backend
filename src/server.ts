@@ -1,4 +1,4 @@
-import express, {Express,Request,Response,Application} from 'express';
+import express, {Request,Response,Application, NextFunction} from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import mongoose from 'mongoose';
@@ -7,6 +7,11 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 dotenv.config()
+
+// import { Server } from "socket.io";
+// const app = express();
+// const server = require('http').Server(app);
+// const io = new Server();
 
 const app: Application = express();
 const port = process.env.PORT || 3000;
@@ -17,7 +22,7 @@ app.use(cors({
     origin: process.env.origin,
     optionsSuccessStatus:200
 }));
-app.use(function(req:express.Request, res:express.Response, next:express.NextFunction) {
+app.use(function(req:Request, res:Response, next:NextFunction) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
    next();
 });
