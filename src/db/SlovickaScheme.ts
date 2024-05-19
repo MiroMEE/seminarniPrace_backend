@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// schéma
 const SlovickaSchema = new mongoose.Schema(
     {
         name:String,
@@ -10,6 +11,7 @@ const SlovickaSchema = new mongoose.Schema(
 );
 export const SlovickaModel = mongoose.model('Slovicka',SlovickaSchema)
 
+// CRUD atd... pro slovíčka
 export const getAllSlovicka = () => SlovickaModel.find();
 export const getSlovickoById = (id:string) => SlovickaModel.findById(id);
 export const getSlovickaByName = (name:string) => SlovickaModel.findOne({name:name});

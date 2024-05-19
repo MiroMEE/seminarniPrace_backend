@@ -5,46 +5,45 @@ import {getSlovickaByName,createSlovicko,getSlovickoById,getAllSlovicka, deleteS
 export const vytvorSlovicko = async(req:express.Request,res:express.Response) => {
     try {
         const {name,slovicka_json,jazyk,username} = req.body;
-        if(!name||!slovicka_json||!jazyk){
-            return res.sendStatus(400);
+        if(!name||!slovicka_json||!jazyk||!username){
+            return res.status(404).json({message: 'nebyly zadané všechny údaje'});
         }
         const existName = await getSlovickaByName(name);
         if(existName){
-            return res.sendStatus(403)
+            return res.status(403).json({message: "slovíčko s tímto názvem už existuje"})
         }
-        console.log(username);
         const slovicko = await createSlovicko({
             name:name,
             username:username,
             slovicka_json:slovicka_json,
             jazyk:jazyk
         });
-        return res.json(slovicko).end();
+        return res.status(200).json(slovicko);
       } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
       }
 }
 export const getSlovicko =  async(req:express.Request,res:express.Response) => {
     try {
         const {id} = req.params;
         if(!id){
-            return res.sendStatus(400);
+            return res.status(403).json({message: "slovíčko neexistuje"});
         }
         const slovicko = await getSlovickoById(id);
-        return res.json(slovicko);
+        return res.status(200).json(slovicko);
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }
 export const getAllSlovicek = async(req:express.Request,res:express.Response) => {
     try {
         const allSlovicka = await getAllSlovicka();
-        return res.json(allSlovicka);
+        return res.status(200).json(allSlovicka);
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }
 export const updateSlovicko = async(req:express.Request,res:express.Response) => {
@@ -52,52 +51,76 @@ export const updateSlovicko = async(req:express.Request,res:express.Response) =>
         const {id} = req.params
         const {slovicka_json} = req.body;
         if(!slovicka_json){
-            return res.sendStatus(400)
+            return res.status(400).json({message:"změna nenalezena"})
         }
         const slovicko = await getSlovickoById(id);
+        if(!slovicko){
+            return res.status(403).json({message:"Slovíčko nenalezeno"});
+        }
         slovicko.slovicka_json = slovicka_json;
         await slovicko.save();
-        return res.status(200).json(slovicko).end();
+
+        return res.status(200).json(slovicko);
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }
 export const smazatSlovicko = async(req:express.Request,res:express.Response) => {
     try {
         const {id} = req.params;
+        if(!id){
+            return res.status(404).json({message: "Slovíčko nenalezeno"});
+        }
+
         const znicit = await deleteSlovickoById(id);
-        return res.json(znicit);
+
+        if(!znicit){
+            return res.status(403).json("Slovíčko neexistuje");
+        }
+        return res.status(200).json(znicit);
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }
 
 export const getSlovickaA = async(req:express.Request, res:express.Response) => {
-    const {slovicka} = req.body;
-    const slovickaBalicek = [];
     try {
-        for (const id of slovicka){
-            const getSlovicko = await getSlovickoById(id);
-            slovickaBalicek.push(getSlovicko);
+        const {slovicka} = req.body;
+
+        if(!Array.isArray(slovicka)){
+            return res.status(403).json({message:'slovíčka nejsou pole'});
         }
-        return res.json(slovickaBalicek);
+
+        const slovickaBalicek = [];
+        
+        for (const id of slovicka){
+            const slovicko = await getSlovickoById(id);
+            if(!slovicko){
+                return res.status(403).json({message: 'nastala chyba u slovíček, nějaké má špatné id'})
+            }
+            slovickaBalicek.push(slovicko);
+        }
+        return res.status(200).json(slovickaBalicek);
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }
 export const getOwnSlovicka = async(req:express.Request, res:express.Response) => {
     try {
         const {username} = req.body;
         if(!username){
-            return res.sendStatus(400);
+            return res.status(404).json({message: 'uživatel nenalezen'});
         }
-        const slovicka = await yourSlovicka(username);    
-        return res.json(slovicka);
+        const slovicka = await yourSlovicka(username);
+        if(!slovicka){
+            return res.status(403).json({message:"slovíčka nenalezena"});
+        }  
+        return res.status(200).json(slovicka);
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco je špatně"});
     }
 }

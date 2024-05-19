@@ -2,6 +2,8 @@ import express from 'express';
 
 import {getAllSlovicek, vytvorSlovicko, updateSlovicko, smazatSlovicko, getSlovicko, getSlovickaA, getOwnSlovicka} from '../controllers/slovicka';
 import { isAuthenticated, isOwnerOfSlovicek } from '../middlewares/index';
+
+// routování - slovíčka
 export default (router: express.Router) =>{
     router.get('/api/slovicka',getAllSlovicek);
     router.get('/api/slovicka/:id',getSlovicko);

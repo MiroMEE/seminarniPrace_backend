@@ -7,22 +7,22 @@ export const login = async (req:express.Request,res: express.Response) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-        return res.sendStatus(400);
+            return res.status(403).json({message:"údaje chybí"});
         }
         const user = await getUserByEmail(email).select("password username");
         if (!user) {
-            return res.sendStatus(400);
+            return res.status(403).json({message:"uživatel neexistuje"});
         }
         ;
         if(!comparePassword(password,user.password)){
-            return res.sendStatus(403);
+            return res.status(403).json({message:"hesla se neshodují"});
         }
         const token = setToken(user.username,user._id);
-        //res.cookie('token',token,{httpOnly:true, secure:true});
+
         return res.status(200).json({token:token}).end();
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco se pokazilo"});
     }
 }
 
@@ -31,13 +31,16 @@ export const register = async (req:express.Request, res: express.Response) => {
         const { email, password, username} = req.body;
 
         if (!email || !password ||!username){
-            return res.sendStatus(400);
+            return res.status(404).json({message:"údaje chybí"});
         }
 
         const existingUserByEmail = await getUserByEmail(email);
         const existingUserByName = await getUserByName(username);
-        if(existingUserByEmail || existingUserByName){
-            return res.sendStatus(403);
+        if(existingUserByEmail){
+            return res.status(403).json({message:"Email už existuje!"});
+        }
+        if(existingUserByName){
+            return res.status(403).json({message:"Jméno už existuje!"});
         }
         const passwordHashed = await authentication(password)
         const user = await createUser({
@@ -45,14 +48,15 @@ export const register = async (req:express.Request, res: express.Response) => {
             username,
             password:passwordHashed
         })
-        return res.status(200).json(
-        {
+        if(!user){
+            res.status(400).json({message:"nastala chyba"});
+        }
+        return res.status(200).json({
             username:user.username,
             id:user._id
-        }
-        ).end();
+        });
     }catch(error){
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco se pokazilo"});
     }
 }

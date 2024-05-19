@@ -6,6 +6,7 @@ import slovicka from './slovicka';
 import data from './data';
 const router = express.Router();
 
+// routování - default
 export default (): express.Router => {
     authentication(router);
     users(router);

@@ -4,7 +4,7 @@ export const vytvorHru = async (req:express.Request,res:express.Response)=>{
     try{
         const {name, slovicka, gameMode, players} = req.body;
         if(!name||!slovicka||!gameMode||!players){
-            return res.sendStatus(403);
+            return res.status(404).json({message: "chybí údaje"});
         }
         const data = await createData({
             name:name,
@@ -12,19 +12,25 @@ export const vytvorHru = async (req:express.Request,res:express.Response)=>{
             gameMode:gameMode,
             players:players
         });
-        return res.json(data).end();
+        return res.status(200).json(data);
     } catch(error){
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco ješpatně"});
     }
 }
 export const ziskatHru = async (req:express.Request,res:express.Response)=>{
     try{
         const {id} = req.params;
+        if(!id){
+            return res.status(404).json({message:"chybí údaje"});
+        }
         const data = await getDataById(id);
-        return res.json(data).end();
+        if(!data){
+            return res.status(404).json({message: 'hra nenalezena'});
+        }
+        return res.status(200).json(data);
     } catch(error){
-        console.log(error);
-        return res.sendStatus(400);
+        console.error(error);
+        return res.status(400).json({message:"něco ješpatně"});
     }
 }

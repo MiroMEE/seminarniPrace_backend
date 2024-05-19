@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// schéma
 const UserSchema = new mongoose.Schema({
     username:{type:String,required:true},
     email:{type:String,required:true},
@@ -8,6 +9,7 @@ const UserSchema = new mongoose.Schema({
 
 export const UserModel = mongoose.model('User',UserSchema);
 
+// CRUD atd... pro uživatele
 export const getUsers = () => UserModel.find();
 export const getUserByEmail = (email: string) => UserModel.findOne({ email });
 export const getUserByName = (username: string) => UserModel.findOne({ username });
